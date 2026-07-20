@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-!l+7)#u99=t_+idlphmux4)c!s=ok%+ena&89_9^-_2nj%)e61'
+SECRET_KEY = 'django-insecure-g2j8o91m7fbn_xyb@5qdflp&d0l6rh3fcb4a0qp-7&76((bc#c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -90,6 +90,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "Option": {
+            'min_length': 8
+            
+        }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
