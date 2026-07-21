@@ -16,7 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from frazzetoBookReview.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', BookView.as_view(), name='book'),
+    path('', LoginView.as_view(), name='login'),
+    path('', SignUpView.as_view(), name='signup'),
+    path('', ReviewView.as_view(), name='review'),
+
 ]
