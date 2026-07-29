@@ -61,3 +61,10 @@ class ReviewView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class CourseView(generics.ListCreateAPIView):
+    queryset = Courses.objects.all()
+    serializer_class = CourseSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(instructor=self.request.user)

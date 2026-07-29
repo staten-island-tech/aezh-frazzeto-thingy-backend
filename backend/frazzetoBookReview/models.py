@@ -10,18 +10,19 @@ class Authors(models.Model):
 
 class Books(models.Model):
     author = models.ForeignKey(Authors,on_delete=models.CASCADE,related_name="books")
+    img = models.URLField()
     genre = models.CharField(max_length=40)
     title = models.CharField(max_length=100)
     pageLength = models.IntegerField()
-    reviewCount = models.IntegerField
+    reviewCount = models.IntegerField()
 
 class Reviews(models.Model):
     user = models.ForeignKey("auth.User",on_delete=models.CASCADE, related_name="reviews")
     stars =models.IntegerField(validators=[ MinValueValidator(1),MaxValueValidator(5)])
     textReview =models.CharField(max_length=400)
     book = models.ForeignKey(Books,on_delete=models.CASCADE, related_name="reviews")
-
-
-
-
-    
+#courses
+class Courses(models.Model):
+    name = models.CharField(max_length=100)
+    students = models.ManyToManyField("auth.User", related_name="enrolled_courses")
+    instructor = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="courses")

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from frazzetoBookReview.models import Authors, Reviews, Books, User
+from frazzetoBookReview.models import Authors, Courses, Reviews, Books, User
 from django.db.models import Avg
 from django.contrib.auth import authenticate
 
@@ -18,9 +18,10 @@ class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     averageRating = serializers.FloatField(read_only=True)
     reviewCount = serializers.IntegerField(read_only=True)
+    img = serializers.URLField(required=True)
     class Meta:
         model = Books
-        fields = ["id", "author", "averageRating", "genre", "title", "pageLength", "reviewCount"]
+        fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount"]
 
 
 
@@ -48,3 +49,10 @@ class LoginSerializer(serializers.Serializer):
 
             data["user"] = user
             return data
+
+class CourseSerializer(serializers.ModelSerializer):
+    instructor = serializers.StringRelatedField(read_only=True)
+    students = serializers.StringRelatedField(many=True, read_only=True)
+    class Meta:
+        model = Courses
+        fields = ["id", "name", "students", "instructor"]
