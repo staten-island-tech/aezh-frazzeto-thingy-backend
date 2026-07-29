@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from frazzetoBookReview.models import Authors, Reviews, Books, User
+from django.db.models import Avg
+from django.contrib.auth import authenticate
 
 class AuthorSerializer(serializers.ModelSerializer):
     class Meta:
@@ -10,14 +12,39 @@ class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reviews
         fields = ["id", "user", "stars", "textReview", "book"]
+        read_only_fields = ["user"]
 
 class BookSerializer(serializers.ModelSerializer):
+    author = AuthorSerializer(read_only=True)
+    averageRating = serializers.FloatField(read_only=True)
+    reviewCount = serializers.IntegerField(read_only=True)
     class Meta:
         model = Books
-        fields = ["id", "author", "averageRating", "genre", "title", "pageLength"]
+        fields = ["id", "author", "averageRating", "genre", "title", "pageLength", "reviewCount"]
 
 
-class UserSerializer(serializers.ModelSerializer):
+
+class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "username", "password", "email", "reviews"]
+        extra_kwargs = {"password": {"write_only": True}}
+    def create(self, data):
+        return User.objects.create_user(**data)
+    
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    def validate(self, data):
+            user = authenticate(
+                username=data["username"],
+                password=data["password"]
+            )
+
+            if user is None:
+                raise serializers.ValidationError(
+                    "Invalid username or password"
+                )
+
+            data["user"] = user
+            return data

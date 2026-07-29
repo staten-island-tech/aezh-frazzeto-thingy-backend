@@ -8,12 +8,12 @@ from django.db.models import Avg
 class Authors(models.Model):
     name = models.CharField(max_length=50)
 
-class Books(models.Models):
+class Books(models.Model):
     author = models.ForeignKey(Authors,on_delete=models.CASCADE,related_name="books")
-    # averageRating = 
     genre = models.CharField(max_length=40)
     title = models.CharField(max_length=100)
-    pageLength = models.CharField(max_length=2000)
+    pageLength = models.IntegerField()
+    reviewCount = models.IntegerField
 
 class Reviews(models.Model):
     user = models.ForeignKey("auth.User",on_delete=models.CASCADE, related_name="reviews")
