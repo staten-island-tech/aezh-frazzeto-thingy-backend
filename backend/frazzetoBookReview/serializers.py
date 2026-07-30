@@ -8,6 +8,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Authors
         fields = ["id", "name"]
 
+
 class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reviews
@@ -24,27 +25,15 @@ class BookSerializer(serializers.ModelSerializer):
 
 
 
-class SignUpSerializer(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ["id", "username", "password", "email", "reviews"]
-        extra_kwargs = {"password": {"write_only": True}}
-    def create(self, data):
-        return User.objects.create_user(**data)
-    
-class LoginSerializer(serializers.Serializer):
-    username = serializers.CharField()
-    password = serializers.CharField(write_only=True)
-    def validate(self, data):
-            user = authenticate(
-                username=data["username"],
-                password=data["password"]
-            )
-
-            if user is None:
-                raise serializers.ValidationError(
-                    "Invalid username or password"
-                )
-
-            data["user"] = user
-            return data
+        fields = ['username', 'email', 'password']
+    def create(self, validated_data):
+        user = User.objects.create_user(
+            username=validated_data.get('email', '').split('@', 1)[0],
+            email=validated_data.get('email', ''),
+            password=validated_data['password']
+        )
+        return user
