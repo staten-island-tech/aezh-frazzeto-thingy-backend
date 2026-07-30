@@ -68,6 +68,17 @@ class CourseView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)
+    def getandpost(request):
+        if request.method == 'GET':
+            courses = Courses.objects.all()
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data)
+        elif request.method == 'POST':
+            serializer = CourseSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(instructor=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AssignmentReviewView(generics.ListCreateAPIView):
     queryset = AssignmentReviews.objects.all()
