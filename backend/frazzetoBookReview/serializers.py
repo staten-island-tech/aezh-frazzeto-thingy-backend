@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from frazzetoBookReview.models import Authors, Courses, Reviews, Books, User
+from frazzetoBookReview.models import AssignmentReviews, Authors, Courses, Reviews, Books, User
 from django.db.models import Avg
 from django.contrib.auth import authenticate
 
 class AuthorSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=50)
     class Meta:
         model = Authors
         fields = ["id", "name"]
@@ -22,8 +23,6 @@ class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Books
         fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount"]
-
-
 
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
@@ -53,6 +52,14 @@ class LoginSerializer(serializers.Serializer):
 class CourseSerializer(serializers.ModelSerializer):
     instructor = serializers.StringRelatedField(read_only=True)
     students = serializers.StringRelatedField(many=True, read_only=True)
+    archived = serializers.BooleanField(default=False)
     class Meta:
         model = Courses
-        fields = ["id", "name", "students", "instructor"]
+        fields = ["id", "name", "classcode", "students", "instructor", "archived", "period"]
+
+class AssignmentReviewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssignmentReviews
+        fields = ["id", "user", "stars", "textReview", "course"]
+        read_only_fields = ["user"]
+
