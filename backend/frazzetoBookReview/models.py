@@ -21,6 +21,7 @@ class Reviews(models.Model):
     stars =models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     textReview =models.CharField(max_length=400)
     book = models.ForeignKey(Books,on_delete=models.CASCADE, related_name="reviews")
+    isAssignment = models.BooleanField(default=False)
 
 class Courses(models.Model):
     name = models.CharField(max_length=100)
