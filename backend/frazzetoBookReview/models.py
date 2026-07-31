@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.db.models import Avg
 # Create your models here.
 
+class User(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="user_profile")
+    is_instructor = models.BooleanField(default=False)
 
 class Authors(models.Model):
     name = models.CharField(max_length=50)
@@ -19,7 +22,7 @@ class Books(models.Model):
 class Reviews(models.Model):
     user = models.ForeignKey("auth.User",on_delete=models.CASCADE, related_name="reviews")
     stars =models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
-    textReview =models.CharField(max_length=400)
+    textReview =models.CharField(max_length=500)
     book = models.ForeignKey(Books,on_delete=models.CASCADE, related_name="reviews")
 
 class Courses(models.Model):
@@ -33,5 +36,5 @@ class Courses(models.Model):
 class AssignmentReviews(models.Model):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="assignment_reviews")
     stars = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
-    textReview = models.CharField(max_length=400)
+    textReview = models.CharField(max_length=500)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name="assignment_reviews")

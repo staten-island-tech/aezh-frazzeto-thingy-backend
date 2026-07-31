@@ -3,6 +3,11 @@ from frazzetoBookReview.models import AssignmentReviews, Authors, Courses, Revie
 from django.db.models import Avg
 from django.contrib.auth import authenticate
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "username", "email", "is_instructor"]
+
 class AuthorSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=50)
     class Meta:

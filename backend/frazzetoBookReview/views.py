@@ -94,3 +94,7 @@ class AssignmentReviewView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+class userView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
