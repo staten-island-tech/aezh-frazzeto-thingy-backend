@@ -14,6 +14,7 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Authors
         fields = ["id", "name"]
 
+
 class ReviewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reviews
@@ -29,7 +30,8 @@ class BookSerializer(serializers.ModelSerializer):
         model = Books
         fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount"]
 
-class SignUpSerializer(serializers.ModelSerializer):
+class UserRegisterSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True)
     class Meta:
         model = User
         fields = ["id", "username", "password", "email", "reviews"]
