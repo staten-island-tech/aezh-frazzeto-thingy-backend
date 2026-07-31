@@ -27,5 +27,5 @@ urlpatterns = [
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('', BookView.as_view(), name='book'),
     path('', ReviewView.as_view(), name='review'),
-
+    path('', CourseView.as_view(), name='course')
 ]

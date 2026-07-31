@@ -28,11 +28,42 @@ class BookView(generics.ListAPIView):
             averageRating=Avg("reviews__stars"),
             reviewCount=Count("reviews")
         )
-
+    def addbook(request):
+        if request.method == 'POST':
+            serializer = BookSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 class ReviewView(generics.ListCreateAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class CourseView(generics.ListCreateAPIView):
+    queryset = Courses.objects.all()
+    serializer_class = CourseSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(instructor=self.request.user)
+    def getandpost(request):
+        if request.method == 'GET':
+            courses = Courses.objects.all()
+            serializer = CourseSerializer(courses, many=True)
+            return Response(serializer.data)
+        elif request.method == 'POST':
+            serializer = CourseSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save(instructor=request.user)
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class AssignmentReviewView(generics.ListCreateAPIView):
+    queryset = AssignmentReviews.objects.all()
+    serializer_class = AssignmentReviewsSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

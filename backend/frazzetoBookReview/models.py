@@ -18,12 +18,21 @@ class Books(models.Model):
 
 class Reviews(models.Model):
     user = models.ForeignKey("auth.User",on_delete=models.CASCADE, related_name="reviews")
-    stars =models.IntegerField(validators=[ MinValueValidator(1),MaxValueValidator(5)])
+    stars =models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
     textReview =models.CharField(max_length=400)
     book = models.ForeignKey(Books,on_delete=models.CASCADE, related_name="reviews")
     isAssignment = models.BooleanField(default=False)
 
 class Courses(models.Model):
     name = models.CharField(max_length=100)
+    classcode = models.CharField(max_length=9, unique=True)
     students = models.ManyToManyField("auth.User", related_name="enrolled_courses")
     instructor = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="courses")
+    archived = models.BooleanField(default=False)
+    period = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(9)])
+
+class AssignmentReviews(models.Model):
+    user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="assignment_reviews")
+    stars = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(5)])
+    textReview = models.CharField(max_length=400)
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name="assignment_reviews")

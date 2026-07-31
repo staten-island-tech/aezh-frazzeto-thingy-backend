@@ -1,9 +1,10 @@
 from rest_framework import serializers
-from frazzetoBookReview.models import Authors, Reviews, Books, User
+from frazzetoBookReview.models import AssignmentReviews, Authors, Courses, Reviews, Books, User
 from django.db.models import Avg
 from django.contrib.auth import authenticate
 
 class AuthorSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(max_length=50)
     class Meta:
         model = Authors
         fields = ["id", "name"]
@@ -19,21 +20,48 @@ class BookSerializer(serializers.ModelSerializer):
     author = AuthorSerializer(read_only=True)
     averageRating = serializers.FloatField(read_only=True)
     reviewCount = serializers.IntegerField(read_only=True)
+    img = serializers.URLField(required=True)
     class Meta:
         model = Books
-        fields = ["id", "author", "averageRating", "genre", "title", "pageLength", "reviewCount"]
-
-
+        fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount"]
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     class Meta:
         model = User
-        fields = ['username', 'email', 'password']
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            username=validated_data.get('email', '').split('@', 1)[0],
-            email=validated_data.get('email', ''),
-            password=validated_data['password']
-        )
-        return user
+        fields = ["id", "username", "password", "email", "reviews"]
+        extra_kwargs = {"password": {"write_only": True}}
+    def create(self, data):
+        return User.objects.create_user(**data)
+    
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    def validate(self, data):
+            user = authenticate(
+                username=data["username"],
+                password=data["password"]
+            )
+
+            if user is None:
+                raise serializers.ValidationError(
+                    "Invalid username or password"
+                )
+
+            data["user"] = user
+            return data
+
+class CourseSerializer(serializers.ModelSerializer):
+    instructor = serializers.StringRelatedField(read_only=True)
+    students = serializers.StringRelatedField(many=True, read_only=True)
+    archived = serializers.BooleanField(default=False)
+    class Meta:
+        model = Courses
+        fields = ["id", "name", "classcode", "students", "instructor", "archived", "period"]
+
+class AssignmentReviewsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssignmentReviews
+        fields = ["id", "user", "stars", "textReview", "course"]
+        read_only_fields = ["user"]
+
