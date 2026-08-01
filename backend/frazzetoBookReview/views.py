@@ -24,18 +24,21 @@ class BookView(generics.ListAPIView):
     pagination_class = BookPagination
 
     def get_queryset(self):
-        return Books.objects.annotate(
+        queryset = Books.objects.annotate(
             averageRating=Avg("reviews__stars"),
             reviewCount=Count("reviews")
         )
-    def addbook(request):
-        if request.method == 'POST':
-            serializer = BookSerializer(data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        title = self.request.query_params.get("title")
+        genre = self.request.query_params.get("genre")
+        author = self.request.query_params.get("author")
+        if title:
+            queryset = queryset.filter(title__icontains=title)
+        if genre:
+            queryset = queryset.filter(genre__icontains=genre)
+        if author:
+            queryset = queryset.filter(author__name__icontains=author)
+        return queryset
+
 class ReviewView(generics.ListCreateAPIView):
     queryset = Reviews.objects.all()
     serializer_class = ReviewsSerializer

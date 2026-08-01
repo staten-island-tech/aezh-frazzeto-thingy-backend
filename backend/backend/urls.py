@@ -25,7 +25,7 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    path('', BookView.as_view(), name='book'),
-    path('', ReviewView.as_view(), name='review'),
-    path('', CourseView.as_view(), name='course')
+    path('api/books/', BookView.as_view(), name='book'),
+    path('api/books/review/', ReviewView.as_view(), name='review'),
+    path('api/courses/', CourseView.as_view(), name='course')
 ]
