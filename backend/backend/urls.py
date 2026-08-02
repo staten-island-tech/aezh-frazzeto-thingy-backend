@@ -26,6 +26,11 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/books/', BookView.as_view(), name='book'),
-    path('api/books/review/', ReviewView.as_view(), name='review'),
-    path('api/courses/', CourseView.as_view(), name='course')
+    path('api/review/', ReviewView.as_view(), name='review'),
+    path('api/courses/', CourseView.as_view(), name='course'),
+    path('api/courses/', CourseView.as_view(), name='course'),
+    path('api/courses/join/', JoinCourseView.as_view(), name='join-course'),
+    path('api/assignments/', AssignmentReviewView.as_view(), name='assignment-list-create'),
+    path('api/assignments/delete/<int:pk>/', ReviewDeleteView.as_view(), name='assignment-delete'),
+
 ]
