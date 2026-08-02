@@ -52,15 +52,6 @@ class UserRegisterView(generics.CreateAPIView):
     serializer_class = UserRegisterSerializer
     permission_classes = [AllowAny]
 
-    def create(self, validated_data):
-      email = validated_data["email"]
-      try:
-          user = User.objects.create_user(username=email,email=email,password=validated_data["password"])
-      except IntegrityError:
-        raise serializers.ValidationError({"email": "An account with this email already exists."})
-        UserProfile.objects.get_or_create(user=user)
-        return user
-
 
 class BookPagination(PageNumberPagination):
     page_size = 20
