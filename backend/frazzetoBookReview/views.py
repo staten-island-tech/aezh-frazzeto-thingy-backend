@@ -142,9 +142,6 @@ class ChangePasswordView(APIView):
         data = serializer.validated_data
 
         user = request.user
-        if not user.check_password(data["old_password"]):
-            return Response({"error": "Current password is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
-
         old_refresh = request.data.get("refresh")
         if old_refresh:
             try:

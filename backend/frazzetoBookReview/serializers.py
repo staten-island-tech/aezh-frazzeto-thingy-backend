@@ -99,7 +99,6 @@ class AssignmentReviewsSerializer(serializers.ModelSerializer):
         read_only_fields = ["assigned_by", "created_at"]
 
 class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(write_only=True)
     new_password = serializers.CharField(write_only=True)
     new_password_confirm = serializers.CharField(write_only=True)
 
