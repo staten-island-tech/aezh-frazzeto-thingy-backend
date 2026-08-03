@@ -9,7 +9,7 @@ class UserProfile(models.Model):
     is_instructor = models.BooleanField(default=False)
 
 class Authors(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=255)
 
 class Books(models.Model):
     author = models.ForeignKey(Authors,on_delete=models.CASCADE,related_name="books")
