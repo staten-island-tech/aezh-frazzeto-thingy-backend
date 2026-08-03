@@ -65,7 +65,7 @@ class BookView(generics.ListCreateAPIView):
         queryset = Books.objects.annotate(
             averageRating=Avg("reviews__stars"),
             reviewCount=Count("reviews")
-        )
+        ).order_by("id")
         title = self.request.query_params.get("title")
         genre = self.request.query_params.get("genre")
         author = self.request.query_params.get("author")
