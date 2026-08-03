@@ -56,7 +56,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             )
         except IntegrityError:
             raise serializers.ValidationError({"email": "An account with this email already exists."})
-        UserProfile.objects.create(user=user)
+        UserProfile.objects.get_or_create(user=user)
         return user
 
 class LoginSerializer(serializers.Serializer):
