@@ -10,7 +10,7 @@ class Command(BaseCommand):
         added_count = 0
         skipped_count = 0
 
-        with open("data.csv", encoding="utf-8") as file:
+        with open("Books.csv", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
                 title = row["title"][:100]
