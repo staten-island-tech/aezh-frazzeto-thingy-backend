@@ -13,21 +13,21 @@ class Command(BaseCommand):
         with open("Books.csv", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                title = row["title"][:100]
+                title = row["title"]
 
                 if Books.objects.filter(title__iexact=title).exists():
                     skipped_count += 1
                     continue
 
                 author, _ = Authors.objects.get_or_create(
-                    name=row["authors"]
+                    name=row["author"]
                 )
                 Books.objects.create(
                     author=author,
                     img=row["thumbnail"],
-                    genre=row["categories"][:40],
+                    genre=row["genre"][:40],
                     title=title,
-                    pageLength=int(row["num_pages"]) if row["num_pages"] else 0
+                    pageLength=int(row["pages"]) if row["pages"] else 0
                 )
                 added_count += 1
 
