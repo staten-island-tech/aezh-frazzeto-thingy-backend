@@ -54,7 +54,7 @@ class UserRegisterView(generics.CreateAPIView):
 
 
 class BookPagination(PageNumberPagination):
-    page_size = 20
+    page_size = 10
 class BookView(generics.ListCreateAPIView):
     queryset = Books.objects.all()
     serializer_class = BookSerializer
