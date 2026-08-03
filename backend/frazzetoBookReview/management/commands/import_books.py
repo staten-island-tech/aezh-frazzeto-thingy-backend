@@ -10,24 +10,28 @@ class Command(BaseCommand):
         added_count = 0
         skipped_count = 0
 
-        with open("Books.csv", encoding="utf-8") as file:
+        with open("data.csv", encoding="utf-8") as file:
             reader = csv.DictReader(file)
             for row in reader:
-                title = row["title"]
+                title = row["title"][:100]
 
                 if Books.objects.filter(title__iexact=title).exists():
                     skipped_count += 1
                     continue
 
                 author, _ = Authors.objects.get_or_create(
-                    name=row["author"]
+                    name=row["authors"]
                 )
+
+                pages_raw = row["pages"]
+                pageLength = int(pages_raw) if pages_raw and pages_raw.isdigit() else 0
+
                 Books.objects.create(
                     author=author,
                     img=row["thumbnail"],
-                    genre=row["genre"][:40],
+                    genre=row["categories"][:40],
                     title=title,
-                    pageLength=int(row["pages"]) if row["pages"] else 0
+                    pageLength=pageLength
                 )
                 added_count += 1
 
