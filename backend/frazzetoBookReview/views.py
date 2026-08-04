@@ -70,14 +70,21 @@ class BookView(generics.ListCreateAPIView):
         genre = self.request.query_params.get("genre")
         author = self.request.query_params.get("author")
         book_id = self.request.query_params.get("id")
+        featured = self.request.query_params.get("featured")
+        if book_id:
+            queryset = queryset.filter(id=book_id)
+            return queryset
+        if featured is not None:
+            if featured.lower() == "true":
+                queryset = queryset.filter(featured=True)
+            elif featured.lower() == "false":
+                queryset = queryset.filter(featured=False)
         if title:
             queryset = queryset.filter(title__icontains=title)
         if genre:
             queryset = queryset.filter(genre__icontains=genre)
         if author:
             queryset = queryset.filter(author__name__icontains=author)
-        if book_id:
-            queryset = queryset.filter(id=book_id)
         return queryset
 
 class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
