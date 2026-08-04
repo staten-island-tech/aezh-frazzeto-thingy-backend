@@ -7,7 +7,7 @@ from frazzetoBookReview.serializers import *
 from django.contrib.auth.models import User
 from rest_framework.pagination import PageNumberPagination
 from frazzetoBookReview.models import Books
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count, Q
 from rest_framework.permissions import AllowAny, BasePermission
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
@@ -27,7 +27,7 @@ class IsCourseInstructor(BasePermission):
             return Courses.objects.filter(id=course_id, instructor=request.user).exists()
         return False
 
-class CanCreateCourseAndAddBook(BasePermission):
+class CanCreateCourseAndAddBookAndFeatureBook(BasePermission):
     def has_permission(self, request, view):
         if not request.user.is_authenticated:
             return False
@@ -59,7 +59,7 @@ class BookView(generics.ListCreateAPIView):
     queryset = Books.objects.all()
     serializer_class = BookSerializer
     pagination_class = BookPagination
-    permission_classes = [CanCreateCourseAndAddBook]
+    permission_classes = [CanCreateCourseAndAddBookAndFeatureBook]
 
     def get_queryset(self):
         queryset = Books.objects.annotate(
@@ -80,6 +80,10 @@ class BookView(generics.ListCreateAPIView):
             queryset = queryset.filter(id=book_id)
         return queryset
 
+class BookDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Books.objects.all()
+    serializer_class = BookSerializer
+    permission_classes = [CanCreateCourseAndAddBookAndFeatureBook]
 
 class ReviewPagination(PageNumberPagination):
     page_size = 3
@@ -112,7 +116,7 @@ class AssignmentReviewView(generics.ListCreateAPIView):
 
 class CourseView(generics.ListCreateAPIView):
     serializer_class = CourseSerializer
-    permission_classes = [CanCreateCourseAndAddBook]
+    permission_classes = [CanCreateCourseAndAddBookAndFeatureBook]
 
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)

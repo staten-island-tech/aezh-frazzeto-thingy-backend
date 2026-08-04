@@ -20,6 +20,7 @@ class Books(models.Model):
     genre = models.CharField(max_length=40)
     title = models.TextField()
     pageLength = models.IntegerField()
+    featured = models.BooleanField(default=False)
 
 class Courses(models.Model):
     name = models.CharField(max_length=100)

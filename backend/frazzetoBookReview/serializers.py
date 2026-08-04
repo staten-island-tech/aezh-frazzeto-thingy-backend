@@ -33,10 +33,9 @@ class BookSerializer(serializers.ModelSerializer):
     averageRating = serializers.FloatField(read_only=True)
     reviewCount = serializers.IntegerField(read_only=True)
     img = serializers.URLField(required=True)
-
     class Meta:
         model = Books
-        fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount"]
+        fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount", "featured"]
 
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

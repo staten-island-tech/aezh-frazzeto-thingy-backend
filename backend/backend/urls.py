@@ -28,9 +28,10 @@ urlpatterns = [
     path('api/books/', BookView.as_view(), name='book'),
     path('api/review/', ReviewView.as_view(), name='review'),
     path('api/courses/', CourseView.as_view(), name='course'),
-    path('api/courses/', CourseView.as_view(), name='course'),
+    path('api/change-password/', ChangePasswordView.as_view(), name='change-password'),
     path('api/courses/join/', JoinCourseView.as_view(), name='join-course'),
     path('api/assignments/', AssignmentReviewView.as_view(), name='assignment-list-create'),
     path('api/assignments/delete/<int:pk>/', ReviewDeleteView.as_view(), name='assignment-delete'),
+    path('api/books/update/<int:pk>/', BookDetailView.as_view(), name='book-update-delete'),
 
 ]
