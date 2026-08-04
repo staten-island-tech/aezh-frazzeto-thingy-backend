@@ -33,7 +33,7 @@ class CanCreateCourseAndAddBookAndFeatureBook(BasePermission):
             return False
         if request.method == "GET":
           return True
-        if request.method == "POST":
+        if request.method in ["POST", "PUT", "PATCH", "DELETE"]:
           return (request.user.is_authenticated and hasattr(request.user, "user_profile") and request.user.user_profile.is_instructor)
 
 class CanDeleteReview(BasePermission):
