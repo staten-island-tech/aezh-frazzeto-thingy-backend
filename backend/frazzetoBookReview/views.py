@@ -43,10 +43,9 @@ class CanDeleteReview(BasePermission):
     def has_object_permission(self, request, view, obj):
         if obj.user == request.user:
             return True
-        if not (hasattr(request.user, "user_profile") and request.user.user_profile.is_instructor):
-            return False
-        return Courses.objects.filter(instructor=request.user, students=obj.user).exists()
-
+        if (hasattr(request.user, "user_profile") and request.user.user_profile.is_instructor):
+            return True
+        return False
 class UserRegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserRegisterSerializer
