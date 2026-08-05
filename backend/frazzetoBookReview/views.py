@@ -125,6 +125,7 @@ from rest_framework import viewsets
 class CourseView(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [CanCreateCourseAndAddBookAndFeatureBook]
+    lookup_field = "id"
 
     def get_queryset(self):
         user = self.request.user
@@ -136,7 +137,7 @@ class CourseView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)
-        
+
 class JoinCourseView(APIView):
     def post(self, request):
         classcode = request.data.get("classcode")
