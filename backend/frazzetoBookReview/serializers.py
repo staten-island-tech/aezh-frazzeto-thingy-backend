@@ -29,20 +29,13 @@ class ReviewsSerializer(serializers.ModelSerializer):
         read_only_fields = ["user", "isAssignment"]
 
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer()
-
+    author = AuthorSerializer(read_only=True)
+    averageRating = serializers.FloatField(read_only=True)
+    reviewCount = serializers.IntegerField(read_only=True)
+    img = serializers.URLField(required=True)
     class Meta:
         model = Books
-        fields = [
-            "id",
-            "author",
-            "img",
-            "genre",
-            "title",
-            "pageLength",
-            "featured"
-        ]
-
+        fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount", "featured"]
     def create(self, validated_data):
         author_data = validated_data.pop("author")
 
