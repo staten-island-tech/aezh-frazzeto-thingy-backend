@@ -33,5 +33,6 @@ urlpatterns = [
     path('api/assignments/', AssignmentReviewView.as_view(), name='assignment-list-create'),
     path('api/review/delete/<int:pk>/', ReviewDeleteView.as_view(), name='assignment-delete'),
     path('api/books/update/<int:pk>/', BookDetailView.as_view(), name='book-update-delete'),
+    path('api/users/<int:id>/', IdToUser.as_view(), name='user-detail'),
 
 ]
