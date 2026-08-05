@@ -29,14 +29,33 @@ class ReviewsSerializer(serializers.ModelSerializer):
         read_only_fields = ["user", "isAssignment"]
 
 class BookSerializer(serializers.ModelSerializer):
-    author = AuthorSerializer(read_only=True)
-    averageRating = serializers.FloatField(read_only=True)
-    reviewCount = serializers.IntegerField(read_only=True)
-    img = serializers.URLField(required=True)
+    author = AuthorSerializer()
+
     class Meta:
         model = Books
-        fields = ["id", "author", "img", "averageRating", "genre", "title", "pageLength", "reviewCount", "featured"]
+        fields = [
+            "id",
+            "author",
+            "img",
+            "genre",
+            "title",
+            "pageLength",
+            "featured"
+        ]
 
+    def create(self, validated_data):
+        author_data = validated_data.pop("author")
+
+        author, created = Authors.objects.get_or_create(
+            name=author_data["name"]
+        )
+
+        book = Books.objects.create(
+            author=author,
+            **validated_data
+        )
+
+        return book
 class UserRegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 

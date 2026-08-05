@@ -130,6 +130,7 @@ class CourseView(generics.ListCreateAPIView):
         print("Logged in user:", user, user.id)
         print("Instructor courses:", Courses.objects.filter(instructor=user))
         print("All courses:", list(Courses.objects.values("id", "instructor_id")))
+        print("Instructor courses:", Courses.objects.filter(instructor=user))
 
         if hasattr(user, "user_profile") and user.user_profile.is_instructor:
             return Courses.objects.filter(instructor=user)
@@ -182,3 +183,7 @@ class ChangePasswordView(APIView):
             "access": str(refresh.access_token),
             "refresh": str(refresh),
         })
+class IdToUser(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    lookup_field = 'id'
