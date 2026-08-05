@@ -128,6 +128,8 @@ class CourseView(generics.ListCreateAPIView):
         user = self.request.user
 
         if hasattr(user, "user_profile") and user.user_profile.is_instructor:
+            print("Instructor detected" + str(user))
+            print(Courses.objects.filter(instructor=user))
             return Courses.objects.filter(instructor=user)
 
         return Courses.objects.filter(students=user)
