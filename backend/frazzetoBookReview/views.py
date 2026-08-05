@@ -120,25 +120,23 @@ class AssignmentReviewView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(assigned_by=self.request.user)
 
-class CourseView(generics.ListCreateAPIView):
+from rest_framework import viewsets
+
+class CourseView(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     permission_classes = [CanCreateCourseAndAddBookAndFeatureBook]
 
     def get_queryset(self):
         user = self.request.user
 
-        print("Logged in user:", user, user.id)
-        print("Instructor courses:", Courses.objects.filter(instructor=user))
-        print("All courses:", list(Courses.objects.values("id", "instructor_id")))
-        print("Instructor courses:", Courses.objects.filter(instructor=user))
-
         if hasattr(user, "user_profile") and user.user_profile.is_instructor:
             return Courses.objects.filter(instructor=user)
 
         return Courses.objects.filter(students=user)
+
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)
-
+        
 class JoinCourseView(APIView):
     def post(self, request):
         classcode = request.data.get("classcode")
