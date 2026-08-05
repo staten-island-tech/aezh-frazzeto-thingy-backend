@@ -91,7 +91,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Courses
-        fields = ["id", "name", "classcode", "students", "instructor", "period"]
+        fields = ["id", "name", "classcode", "students", "instructor", "period", "isArchived"]
 
     def create(self, validated_data):
         validated_data["classcode"] = self._generate_unique_classcode()

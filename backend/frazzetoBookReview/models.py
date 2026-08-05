@@ -28,7 +28,7 @@ class Courses(models.Model):
     students = models.ManyToManyField("auth.User", related_name="enrolled_courses")
     instructor = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="courses")
     period = models.IntegerField(validators=[MinValueValidator(1),MaxValueValidator(9)])
-
+    isArchived = models.BooleanField(default=False)
 class AssignmentReviews(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name="assignments_reviews")
     book = models.ForeignKey(Books, on_delete=models.CASCADE, related_name="assignments")
