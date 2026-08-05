@@ -124,6 +124,14 @@ class CourseView(generics.ListCreateAPIView):
     serializer_class = CourseSerializer
     permission_classes = [CanCreateCourseAndAddBookAndFeatureBook]
 
+    def get_queryset(self):
+        user = self.request.user
+
+        if hasattr(user, "user_profile") and user.user_profile.is_instructor:
+            return Courses.objects.filter(instructor=user)
+
+        return Courses.objects.filter(students=user)
+
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)
 
