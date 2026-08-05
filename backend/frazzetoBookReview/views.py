@@ -127,11 +127,14 @@ class CourseView(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
 
+        print("Logged in user:", user, user.id)
+        print("Instructor courses:", Courses.objects.filter(instructor=user))
+        print("All courses:", list(Courses.objects.values("id", "instructor_id")))
+
         if hasattr(user, "user_profile") and user.user_profile.is_instructor:
             return Courses.objects.filter(instructor=user)
 
         return Courses.objects.filter(students=user)
-
     def perform_create(self, serializer):
         serializer.save(instructor=self.request.user)
 
