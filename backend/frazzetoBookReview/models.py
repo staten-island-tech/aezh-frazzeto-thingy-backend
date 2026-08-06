@@ -31,14 +31,13 @@ class Courses(models.Model):
     isArchived = models.BooleanField(default=False)
 class AssignmentReviews(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE, related_name="assignments_reviews")
-    book = models.ForeignKey(Books, on_delete=models.CASCADE, related_name="assignments")
     student = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="assignments_reviews")
     assigned_by = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="assignments_created")
     due_date = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ("book", "student", "course")
+        unique_together = ("student", "course")
 class Reviews(models.Model):
     user = models.ForeignKey("auth.User", on_delete=models.CASCADE, related_name="reviews")
     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

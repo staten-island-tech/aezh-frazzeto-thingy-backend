@@ -11,7 +11,7 @@ from django.db.models import Avg, Count, Q
 from rest_framework.permissions import AllowAny, BasePermission
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.exceptions import TokenError
-
+from rest_framework import viewsets
 
 # Permission Checks
 class IsCourseInstructor(BasePermission):
@@ -119,8 +119,6 @@ class AssignmentReviewView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(assigned_by=self.request.user)
-
-from rest_framework import viewsets
 
 class CourseView(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
